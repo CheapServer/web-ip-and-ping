@@ -16,8 +16,12 @@ const webhookToken = 'abcdefghijk'; //設定webhook token
 ```
 (webhook ID跟token去哪裡拿? 這裡有webhook範例網址: https:\//discord.com/api/webhooks/**ID**/**token**)    
   
-4. 打開來即可完成! (`node server.js`)  
-5. 如果要放在systemctl裡面的話，這裡是`ping.service`的範例 (放在 `/etc/systemd/system/ping.service` 後 `systemctl enable ping && systemctl start ping`):  
+4. 安裝套件
+```
+npm install
+```
+5. 打開來即可完成! (`node server.js`)  
+6. 如果要放在systemctl裡面的話，這裡是`ping.service`的範例 (放在 `/etc/systemd/system/ping.service` 後 `systemctl enable ping && systemctl start ping`):  
 ```service
 [Unit]
 Description=CheapServer Edge PING
