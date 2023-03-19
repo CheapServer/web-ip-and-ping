@@ -1,0 +1,93 @@
+
+<!-- 
+      由 CheapServer.fun 製作 -- 使用請標註來源
+            MADE BY CHEAPSERVER.FUN 
+
+
+    _____ _                      _____                            ______ _____   _____ ______ 
+    / ____| |                    / ____|                          |  ____|  __ \ / ____|  ____|
+    | |    | |__   ___  __ _ _ __| (___   ___ _ ____   _____ _ __  | |__  | |  | | |  __| |__   
+    | |    | '_ \ / _ \/ _` | '_ \\___ \ / _ \ '__\ \ / / _ \ '__| |  __| | |  | | | |_ |  __|  
+    | |____| | | |  __/ (_| | |_) |___) |  __/ |   \ V /  __/ |    | |____| |__| | |__| | |____ 
+    \_____|_| |_|\___|\__,_| .__/_____/ \___|_|    \_/ \___|_|    |______|_____/ \_____|______|
+                           | |                                                                 
+                           |_|                                                                  
+-->
+<html lang="en">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #3b8ec2;
+      margin-bottom: 20px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .info > p {
+      margin-bottom: 10px;
+    }
+  </style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChepServer | 邊緣伺服器debug/Ping測試</title>
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/985912004176920627/985912112230596698/CheapServer_white.png">
+  </head>
+  <body>
+    <h1><img src="https://cdn.discordapp.com/attachments/985912004176920627/985912112230596698/CheapServer_white.png" alt="CheapServer Logo" style="height: 3rem;">   CheapServer EDGE</h1>
+    <div class="info">
+      <p id="serverHostname">資訊載入中...</p>
+      <p id="serverIp">資訊載入中...</p>
+      <p id="clientIp">資訊載入中...</p>
+      <p id="ping">資訊載入中...</p>(此延遲會受到網頁影響，請以cmd中的ping工具測量為準)
+      <p id="requestId">資訊載入中...</p>
+      <p>如果有任何問題，請將 <strong>請求ID</strong> 提供給技術部門處理。</p>
+    </div>
+
+    <script>
+      const pingCount = 5;
+      const offset = 0;
+            fetch('/api/info')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('serverIp').textContent = `連線的伺服器IP: ${data.serverIp}`;
+          document.getElementById('clientIp').textContent = `您的IP: ${data.clientIp}`;
+          document.getElementById('serverHostname').textContent = `正連線到伺服器: ${data.serverHostname}`;
+          document.getElementById('requestId').textContent = `請求ID: ${data.requestId}`;
+        });
+      function measurePing() {
+        const startTime = performance.now();
+        fetch('/api/ping')
+          .then(() => {
+            const rtt = performance.now() - startTime;
+            return rtt;
+          })
+          .then((rtt) => {
+            const ping = (rtt - offset).toFixed(2);
+            document.getElementById('ping').textContent = `延遲: ${ping} ms`;
+            setTimeout(measurePing, 3000);
+          })
+          .catch((error) => {
+            console.error(error);
+            setTimeout(measurePing, 3000);
+          });
+      }
+      measurePing();
+    </script>
+  </body>
+</html>
